@@ -1,7 +1,24 @@
+import { useState } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 
 function StartGameScreen() {
+    const [enteredNumber, setEnteredNumber] = useState("");
+
+    const numberInputHandler = (enteredText) => {
+        setEnteredNumber(enteredText);
+    };
+
+    const confirmInputHandler = () => {
+        const chosenNumber = parseInt(enteredNumber);
+
+        if (isNaN(chosenNumber) || chosenNumber < 1 || chosenNumber > 99) {
+            console.log("Wrong!!");
+        } else {
+            console.log("Good");
+        }
+    };
+
     return (
         <View style={styles.inputContainer}>
             <TextInput
@@ -10,13 +27,17 @@ function StartGameScreen() {
                 keyboardType="numeric" // ALWAYS check docs to ensure property works for both platforms
                 autoCapitalize="none"
                 autoCorrect={false}
+                value={enteredNumber}
+                onChangeText={numberInputHandler} // Difference between onChangeText and onChange is that onChangeText sends just the input value to called function whereas onChange sends an event as a prop where you then have to access with event.target.value like in React
             />
             <View style={styles.buttonsContainer}>
                 <View style={{ flex: 1 }}>
                     <PrimaryButton>Reset</PrimaryButton>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <PrimaryButton>Confirm</PrimaryButton>
+                    <PrimaryButton onConfirm={confirmInputHandler}>
+                        Confirm
+                    </PrimaryButton>
                 </View>
             </View>
         </View>
