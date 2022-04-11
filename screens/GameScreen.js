@@ -55,5 +55,13 @@ const styles = StyleSheet.create({
         borderColor: Colors.accent500,
         padding: 24,
         borderRadius: 8,
+        margin: 24,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    guess: {
+        color: Colors.accent500,
+        fontSize: 36,
+        fontWeight: "bold",
     },
 });
