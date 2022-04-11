@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
-import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../utils/colors";
 import Title from "../components/ui/Title";
@@ -66,18 +66,28 @@ function GameScreen({ chosenNumber, onGameOver }) {
                 <Text style={styles.guess}>{currentGuess}</Text>
             </View>
             <Card>
-                <InstructionalText>Higher or Lower?</InstructionalText>
-                <View>
-                    <PrimaryButton
-                        onPress={nextGuessHandler.bind(this, "lower")}
-                    >
-                        -
-                    </PrimaryButton>
-                    <PrimaryButton
-                        onPress={nextGuessHandler.bind(this, "higher")}
-                    >
-                        +
-                    </PrimaryButton>
+                <InstructionalText style={styles.instructionalText}>
+                    Higher or Lower?
+                </InstructionalText>
+                <View style={{ flexDirection: "row" }}>
+                    <View style={{ flex: 1 }}>
+                        <PrimaryButton
+                            onPress={nextGuessHandler.bind(this, "lower")}
+                        >
+                            <Ionicons
+                                name="md-remove"
+                                size={24}
+                                color="white"
+                            />
+                        </PrimaryButton>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <PrimaryButton
+                            onPress={nextGuessHandler.bind(this, "higher")}
+                        >
+                            <Ionicons name="md-add" size={24} color="white" />
+                        </PrimaryButton>
+                    </View>
                 </View>
             </Card>
             <View>
@@ -93,6 +103,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 24,
+        marginTop: 60,
     },
     guessWrapper: {
         borderWidth: 4,
@@ -106,6 +117,9 @@ const styles = StyleSheet.create({
     guess: {
         color: Colors.accent500,
         fontSize: 36,
-        fontWeight: "bold",
+        fontFamily: "open-sans-bold",
+    },
+    instructionalText: {
+        marginBottom: 12,
     },
 });
