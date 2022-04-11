@@ -5,6 +5,8 @@ import React from "react";
 import Colors from "../utils/colors";
 import Title from "../components/ui/Title";
 import PrimaryButton from "../components/ui/PrimaryButton";
+import InstructionalText from "../components/ui/InstructionalText";
+import Card from "../components/ui/Card";
 
 /**
  * This function is outside the functional component in order to set the state as the function must be declared first
@@ -63,8 +65,8 @@ function GameScreen({ chosenNumber, onGameOver }) {
             <View style={styles.guessWrapper}>
                 <Text style={styles.guess}>{currentGuess}</Text>
             </View>
-            <View>
-                <Text>Higher or Lower?</Text>
+            <Card>
+                <InstructionalText>Higher or Lower?</InstructionalText>
                 <View>
                     <PrimaryButton
                         onPress={nextGuessHandler.bind(this, "lower")}
@@ -77,7 +79,7 @@ function GameScreen({ chosenNumber, onGameOver }) {
                         +
                     </PrimaryButton>
                 </View>
-            </View>
+            </Card>
             <View>
                 <Text># of Rounds</Text>
             </View>

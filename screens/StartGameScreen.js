@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, View, TextInput, Alert } from "react-native";
+import { StyleSheet, View, TextInput, Text, Alert } from "react-native";
+
 import PrimaryButton from "../components/ui/PrimaryButton";
+import Title from "../components/ui/Title";
+import Card from "../components/ui/Card";
+import InstructionalText from "../components/ui/InstructionalText";
 import Colors from "../utils/colors";
 
 function StartGameScreen({ startGame }) {
@@ -36,28 +40,32 @@ function StartGameScreen({ startGame }) {
     };
 
     return (
-        <View style={styles.inputContainer}>
-            <TextInput
-                style={styles.numberInput}
-                maxLength={2}
-                keyboardType="numeric" // ALWAYS check docs to ensure property works for both platforms
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={enteredNumber}
-                onChangeText={numberInputHandler} // Difference between onChangeText and onChange is that onChangeText sends just the input value to called function whereas onChange sends an event as a prop where you then have to access with event.target.value like in React
-            />
-            <View style={styles.buttonsContainer}>
-                <View style={{ flex: 1 }}>
-                    <PrimaryButton onPress={resetInputHandler}>
-                        Reset
-                    </PrimaryButton>
+        <View style={styles.root}>
+            <Title>Guess My Number</Title>
+            <Card>
+                <InstructionalText>Enter A Number</InstructionalText>
+                <TextInput
+                    style={styles.numberInput}
+                    maxLength={2}
+                    keyboardType="numeric" // ALWAYS check docs to ensure property works for both platforms
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    value={enteredNumber}
+                    onChangeText={numberInputHandler} // Difference between onChangeText and onChange is that onChangeText sends just the input value to called function whereas onChange sends an event as a prop where you then have to access with event.target.value like in React
+                />
+                <View style={styles.buttonsContainer}>
+                    <View style={{ flex: 1 }}>
+                        <PrimaryButton onPress={resetInputHandler}>
+                            Reset
+                        </PrimaryButton>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <PrimaryButton onPress={confirmInputHandler}>
+                            Confirm
+                        </PrimaryButton>
+                    </View>
                 </View>
-                <View style={{ flex: 1 }}>
-                    <PrimaryButton onPress={confirmInputHandler}>
-                        Confirm
-                    </PrimaryButton>
-                </View>
-            </View>
+            </Card>
         </View>
     );
 }
@@ -65,20 +73,10 @@ function StartGameScreen({ startGame }) {
 export default StartGameScreen;
 
 const styles = StyleSheet.create({
-    inputContainer: {
+    root: {
+        flex: 1,
+        marginTop: 60,
         alignItems: "center",
-        marginTop: 100,
-        marginHorizontal: 24,
-        borderRadius: 8,
-        padding: 16,
-        backgroundColor: Colors.primary800,
-        elevation: 4, // Box shadow - Android ONLY -
-
-        // Box shadow for iOS
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 6,
-        shadowOpacity: 0.25,
     },
     numberInput: {
         height: 50,
