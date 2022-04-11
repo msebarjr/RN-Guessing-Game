@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View, Alert, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../utils/colors";
@@ -7,6 +7,7 @@ import Title from "../components/ui/Title";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import InstructionalText from "../components/ui/InstructionalText";
 import Card from "../components/ui/Card";
+import GuessLogItem from "../components/game/GuessLogItem";
 
 /**
  * This function is outside the functional component in order to set the state as the function must be declared first
@@ -32,10 +33,13 @@ let max = 100;
 function GameScreen({ chosenNumber, onGameOver }) {
     const initialGuess = generateRandomBetween(1, 100, chosenNumber); // With Math.random the upper boundary is EXCLUDED so always go 1 higher hence why passing 100 and not 99
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    const [rounds, setRounds] = useState([initialGuess]);
 
     useEffect(() => {
         if (currentGuess === chosenNumber) {
-            onGameOver();
+            min = 1;
+            max = 100;
+            onGameOver(rounds.length);
         }
     }, [currentGuess]);
 
@@ -56,8 +60,13 @@ function GameScreen({ chosenNumber, onGameOver }) {
             min = currentGuess + 1;
         }
 
-        setCurrentGuess(generateRandomBetween(min, max, currentGuess));
+        const newRandomGuess = generateRandomBetween(min, max, currentGuess);
+
+        setCurrentGuess(newRandomGuess);
+        setRounds((prevState) => [newRandomGuess, ...prevState]); // Using the spread operator at the end puts the new guess at the front when displaying the array
     };
+
+    const guessRoundsListLength = rounds.length;
 
     return (
         <View style={styles.container}>
@@ -90,8 +99,18 @@ function GameScreen({ chosenNumber, onGameOver }) {
                     </View>
                 </View>
             </Card>
-            <View>
-                <Text># of Rounds</Text>
+            <View style={styles.listContainer}>
+                <FlatList
+                    data={rounds}
+                    keyExtractor={(item) => item}
+                    renderItem={(itemData) => (
+                        <GuessLogItem
+                            roundNumber={guessRoundsListLength - itemData.index} // Since adding each guess to beginning of array the index will always be 0 of new item so take length of array and minus the current index and you get the index that the item was entered at
+                            guess={itemData.item}
+                        />
+                    )}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
         </View>
     );
@@ -121,5 +140,9 @@ const styles = StyleSheet.create({
     },
     instructionalText: {
         marginBottom: 12,
+    },
+    listContainer: {
+        flex: 1,
+        padding: 16,
     },
 });
