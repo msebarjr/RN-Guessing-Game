@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import React from "react";
 
 import Colors from "../utils/colors";
 import Title from "../components/ui/Title";
+import PrimaryButton from "../components/ui/PrimaryButton";
 
 /**
  * This function is outside the functional component in order to set the state as the function must be declared first
@@ -23,9 +24,38 @@ function generateRandomBetween(min, max, exclude) {
     }
 }
 
-function GameScreen({ chosenNumber }) {
+let min = 1;
+let max = 100;
+
+function GameScreen({ chosenNumber, onGameOver }) {
     const initialGuess = generateRandomBetween(1, 100, chosenNumber); // With Math.random the upper boundary is EXCLUDED so always go 1 higher hence why passing 100 and not 99
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
+
+    useEffect(() => {
+        if (currentGuess === chosenNumber) {
+            onGameOver();
+        }
+    }, [currentGuess]);
+
+    const nextGuessHandler = (direction) => {
+        if (
+            (direction === "lower" && currentGuess < chosenNumber) ||
+            (direction === "higher" && currentGuess > chosenNumber)
+        ) {
+            Alert.alert("Do Not Lie!", "Cheating is bad...", [
+                { text: "Sorry", style: "default" },
+            ]);
+            return;
+        }
+
+        if (direction === "lower") {
+            max = currentGuess;
+        } else {
+            min = currentGuess + 1;
+        }
+
+        setCurrentGuess(generateRandomBetween(min, max, currentGuess));
+    };
 
     return (
         <View style={styles.container}>
@@ -35,6 +65,18 @@ function GameScreen({ chosenNumber }) {
             </View>
             <View>
                 <Text>Higher or Lower?</Text>
+                <View>
+                    <PrimaryButton
+                        onPress={nextGuessHandler.bind(this, "lower")}
+                    >
+                        -
+                    </PrimaryButton>
+                    <PrimaryButton
+                        onPress={nextGuessHandler.bind(this, "higher")}
+                    >
+                        +
+                    </PrimaryButton>
+                </View>
             </View>
             <View>
                 <Text># of Rounds</Text>
